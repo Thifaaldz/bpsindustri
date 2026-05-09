@@ -29,15 +29,15 @@
 <div class="flex flex-col gap-3 h-full overflow-hidden"
      style="background-color:#FFE9A0; border-radius:2rem; padding:1rem;">
 
-    {{-- Header pill --}}
-    <div class="flex items-center gap-2 bg-white w-max px-3 py-1.5 rounded-full shadow-sm flex-shrink-0">
-        <div class="p-1 rounded-full" style="background:#000;">
-            <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    {{-- Header --}}
+    <div class="flex items-center gap-3 flex-shrink-0">
+        <div class="p-2 rounded-full flex items-center justify-center" style="background:#000; width:40px; height:40px;">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
             </svg>
         </div>
-        <h2 class="text-xs font-bold text-gray-900 whitespace-nowrap">Timeline Kegiatan Statistik Industri</h2>
+        <h2 class="text-xl font-extrabold text-gray-900 whitespace-nowrap">Timeline Kegiatan Statistik Industri</h2>
     </div>
 
     {{-- Calendar white card --}}

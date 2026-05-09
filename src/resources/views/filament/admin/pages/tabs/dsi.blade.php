@@ -13,10 +13,10 @@
     <div style="flex:1.1;min-height:0;overflow:hidden;">
         @livewire(\App\Filament\Admin\Widgets\ProgressDataWidget::class)
     </div>
-    <div style="flex:0.9;min-height:0;overflow:hidden;">
+    <div style="flex:0.8;min-height:0;overflow:hidden;">
         @livewire(\App\Filament\Admin\Widgets\PertumbuhanProduksiWidget::class)
     </div>
-    <div style="flex:1.2;min-height:0;overflow:hidden;">
+    <div style="flex:1.3;min-height:0;overflow:hidden;">
         @livewire(\App\Filament\Admin\Widgets\PeranIndustriChartWidget::class)
     </div>
 </div>

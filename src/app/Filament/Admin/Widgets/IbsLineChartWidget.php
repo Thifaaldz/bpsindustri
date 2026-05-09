@@ -6,7 +6,7 @@ use Filament\Widgets\ChartWidget;
 
 class IbsLineChartWidget extends ChartWidget
 {
-    protected static ?string $heading = 'Pertumbuhan Indeks Produksi';
+    protected static string $view = 'filament.admin.widgets.ibs-line-chart-widget';
     protected static ?string $maxHeight = '250px';
 
     protected function getData(): array

@@ -6,7 +6,7 @@
         .fi-main .fi-page > * { height: 100%; }
     </style>
 
-    <div class="flex w-full gap-4 p-4 overflow-hidden" style="height: calc(100vh - 64px);">
+    <div class="flex w-full gap-4 p-4 overflow-hidden" style="height: calc(100vh - 64px); background-color: #FFFCF0;">
         @if($activeTab === 'DSI')
             @include('filament.admin.pages.tabs.dsi')
         @elseif($activeTab === 'IBS')

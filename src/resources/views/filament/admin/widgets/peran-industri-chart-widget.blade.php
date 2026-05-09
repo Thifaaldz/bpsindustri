@@ -7,17 +7,20 @@
 
 <script id="{{ $uid }}_data" type="application/json">@json($chartData)</script>
 
-<div class="rounded-[2rem] p-4 bg-[#FFE9A0] flex flex-col gap-3 shadow-sm h-full overflow-hidden">
+<div class="flex flex-col gap-3 h-full overflow-hidden"
+     style="background-color:#FFE9A0; border-radius:2rem; padding:1rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);">
 
     {{-- Header --}}
-    <div class="flex items-center gap-2 bg-white w-max px-3 py-1.5 rounded-full shadow-sm flex-shrink-0">
-        <div class="p-1 rounded-full bg-black">
-            <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="flex items-center gap-3 flex-shrink-0">
+        <div class="p-2 rounded-full flex items-center justify-center bg-black" style="width:40px; height:40px;">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/>
             </svg>
         </div>
-        <h2 class="text-xs font-bold text-gray-900 whitespace-nowrap">Peran Industri Pengolahan dalam Ekonomi</h2>
+        <h2 class="text-xl font-extrabold text-gray-900 whitespace-nowrap">Peran Industri Pengolahan dalam Ekonomi</h2>
     </div>
 
     {{-- Sub-row --}}
@@ -35,7 +38,7 @@
     </div>
 
     {{-- Chart card --}}
-    <div class="bg-white rounded-2xl p-3 flex-1 min-h-0 flex items-center gap-4 overflow-hidden"
+    <div class="bg-white rounded-2xl p-3 flex-1 min-h-0 flex items-center justify-center gap-6 overflow-hidden"
         wire:key="{{ $uid }}_{{ $selectedYear }}"
         x-data="{
             chart: null,
@@ -49,13 +52,13 @@
                     options: {
                         responsive: true, maintainAspectRatio: false,
                         plugins: { legend: { display: false } },
-                        cutout: '60%'
+                        cutout: '70%'
                     }
                 });
             }
         }"
     >
-        <div class="relative flex-shrink-0" style="width:130px;height:130px;">
+        <div class="relative flex-1 h-full max-h-[150px] max-w-[150px]">
             <canvas x-ref="cvs" class="w-full h-full"></canvas>
         </div>
         <div class="flex flex-col gap-1.5 flex-1">

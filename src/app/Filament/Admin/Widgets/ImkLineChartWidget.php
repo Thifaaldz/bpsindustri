@@ -6,7 +6,7 @@ use Filament\Widgets\ChartWidget;
 
 class ImkLineChartWidget extends ChartWidget
 {
-    protected static ?string $heading = 'Perkembangan Indeks IMK (IMK QtoQ dan YonY)';
+    protected static string $view = 'filament.admin.widgets.imk-line-chart-widget';
     protected static ?string $maxHeight = '300px';
 
     protected function getData(): array

@@ -4,9 +4,9 @@ namespace App\Filament\Admin\Widgets;
 
 use Filament\Widgets\ChartWidget;
 
-class IbsBarChartWidget extends ChartWidget
+class ImkBarChartWidget extends ChartWidget
 {
-    protected static string $view = 'filament.admin.widgets.ibs-bar-chart-widget';
+    protected static string $view = 'filament.admin.widgets.imk-bar-chart-widget';
     protected static ?string $maxHeight = '250px';
 
     protected function getData(): array
@@ -14,8 +14,8 @@ class IbsBarChartWidget extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Jumlah Industri',
-                    'data' => [120, 80, 150, 90, 200, 100],
+                    'label' => 'Jumlah Usaha',
+                    'data' => [150, 100, 180, 120, 250, 140],
                     'backgroundColor' => '#F57C00',
                 ]
             ],
