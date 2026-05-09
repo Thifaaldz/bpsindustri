@@ -4,13 +4,13 @@ namespace App\Filament\Admin\Widgets;
 
 use App\Models\StatisticSeries;
 use App\Models\StatisticPeriod;
-use Filament\Widgets\ChartWidget;
+use Filament\Widgets\Widget;
 
-class DataIndustriChartWidget extends ChartWidget
+class DataIndustriChartWidget extends Widget
 {
-    protected static ?string $heading = 'Pertumbuhan Data Industri';
-    protected static ?int $sort = 4;
+    protected static string $view = 'filament.admin.widgets.data-industri-chart-widget';
     protected int | string | array $columnSpan = 1;
+    protected static ?int $sort = 4;
 
     public int $selectedYear;
     public array $availableYears = [];
@@ -29,9 +29,13 @@ class DataIndustriChartWidget extends ChartWidget
         }
     }
 
-    protected function getData(): array
+    public function updatedSelectedYear(): void
     {
-        // Fetch all series related to group 'produksi' or all featured series
+        // Livewire re-renders automatically
+    }
+
+    public function getChartData(): array
+    {
         $allSeries = StatisticSeries::whereHas('points.period', function ($q) {
                 $q->where('year', $this->selectedYear);
             })
@@ -41,10 +45,9 @@ class DataIndustriChartWidget extends ChartWidget
                 })->with('period')->orderBy('sort_order');
             }])
             ->orderBy('sort_order')
-            ->take(5) // limit to 5 series max for readability
+            ->take(5)
             ->get();
 
-        // Build labels from periods
         $labels = StatisticPeriod::where('year', $this->selectedYear)
             ->orderBy('sort_order')
             ->pluck('label')
@@ -58,31 +61,33 @@ class DataIndustriChartWidget extends ChartWidget
 
         $datasets = [];
         if ($allSeries->isEmpty()) {
-            // Fallback dummy data
             $datasets = [
                 [
-                    'label'       => 'IBS',
-                    'data'        => [98, 102, 105, 110, 108, 112, 115, 118, 120, 123, 125, 128],
-                    'borderColor' => '#E07B2A',
-                    'borderWidth' => 2,
-                    'tension'     => 0.4,
-                    'fill'        => false,
+                    'label'               => 'IBS',
+                    'data'                => [98, 102, 105, 110, 108, 112, 115, 118, 120, 123, 125, 128],
+                    'borderColor'         => '#E07B2A',
+                    'pointBackgroundColor'=> '#E07B2A',
+                    'borderWidth'         => 2,
+                    'tension'             => 0.4,
+                    'fill'                => false,
                 ],
                 [
-                    'label'       => 'IMK',
-                    'data'        => [85, 87, 90, 92, 95, 97, 98, 100, 102, 105, 107, 110],
-                    'borderColor' => '#2563EB',
-                    'borderWidth' => 2,
-                    'tension'     => 0.4,
-                    'fill'        => false,
+                    'label'               => 'IMK',
+                    'data'                => [85, 87, 90, 92, 95, 97, 98, 100, 102, 105, 107, 110],
+                    'borderColor'         => '#2563EB',
+                    'pointBackgroundColor'=> '#2563EB',
+                    'borderWidth'         => 2,
+                    'tension'             => 0.4,
+                    'fill'                => false,
                 ],
                 [
-                    'label'       => 'KEK-KI',
-                    'data'        => [60, 62, 63, 65, 66, 68, 70, 72, 74, 75, 77, 79],
-                    'borderColor' => '#16A34A',
-                    'borderWidth' => 2,
-                    'tension'     => 0.4,
-                    'fill'        => false,
+                    'label'               => 'KEK-KI',
+                    'data'                => [60, 62, 63, 65, 66, 68, 70, 72, 74, 75, 77, 79],
+                    'borderColor'         => '#16A34A',
+                    'pointBackgroundColor'=> '#16A34A',
+                    'borderWidth'         => 2,
+                    'tension'             => 0.4,
+                    'fill'                => false,
                 ],
             ];
         } else {
@@ -92,13 +97,15 @@ class DataIndustriChartWidget extends ChartWidget
                     $point = $series->points->first(fn($p) => $p->period?->label === $label);
                     $data[] = $point ? $point->value : null;
                 }
+                $color = $series->color ?? ($colors[$index % count($colors)]);
                 $datasets[] = [
-                    'label'       => $series->name,
-                    'data'        => $data,
-                    'borderColor' => $series->color ?? ($colors[$index % count($colors)]),
-                    'borderWidth' => 2,
-                    'tension'     => 0.4,
-                    'fill'        => false,
+                    'label'               => $series->name,
+                    'data'                => $data,
+                    'borderColor'         => $color,
+                    'pointBackgroundColor'=> $color,
+                    'borderWidth'         => 2,
+                    'tension'             => 0.4,
+                    'fill'                => false,
                 ];
             }
         }
@@ -106,32 +113,6 @@ class DataIndustriChartWidget extends ChartWidget
         return [
             'datasets' => $datasets,
             'labels'   => $labels,
-        ];
-    }
-
-    protected function getType(): string
-    {
-        return 'line';
-    }
-
-    protected function getOptions(): array
-    {
-        return [
-            'plugins' => [
-                'legend' => [
-                    'position' => 'bottom',
-                    'labels'   => ['boxWidth' => 12, 'font' => ['size' => 10]],
-                ],
-            ],
-            'scales' => [
-                'y' => [
-                    'beginAtZero' => false,
-                    'grid'        => ['color' => 'rgba(0,0,0,0.05)'],
-                ],
-                'x' => [
-                    'grid' => ['display' => false],
-                ],
-            ],
         ];
     }
 }

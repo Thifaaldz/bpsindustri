@@ -1,31 +1,20 @@
-<x-filament-panels::page>
-    <!-- Main Widget Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        @if($activeTab === 'DSI')
-            <!-- Left Column -->
-            <div class="lg:col-span-5 flex flex-col gap-6">
-                @livewire(\App\Filament\Admin\Widgets\TimelineWidget::class)
-                @livewire(\App\Filament\Admin\Widgets\DataIndustriChartWidget::class)
-            </div>
+<x-filament-panels::page class="!p-0 max-w-full">
+    <style>
+        /* Force main content area to never scroll on dashboard */
+        .fi-main { overflow: hidden !important; }
+        .fi-page { padding: 0 !important; height: 100%; }
+        .fi-main .fi-page > * { height: 100%; }
+    </style>
 
-            <!-- Right Column -->
-            <div class="lg:col-span-7 flex flex-col gap-6">
-                @livewire(\App\Filament\Admin\Widgets\ProgressDataWidget::class)
-                @livewire(\App\Filament\Admin\Widgets\PertumbuhanProduksiWidget::class)
-                @livewire(\App\Filament\Admin\Widgets\PeranIndustriChartWidget::class)
-            </div>
+    <div class="flex w-full gap-4 p-4 overflow-hidden" style="height: calc(100vh - 64px);">
+        @if($activeTab === 'DSI')
+            @include('filament.admin.pages.tabs.dsi')
         @elseif($activeTab === 'IBS')
-            <!-- Placeholder for IBS Widgets -->
-            <div class="lg:col-span-12 flex flex-col gap-6 items-center justify-center py-12">
-                <div class="text-2xl font-bold text-gray-400">Dashboard IBS Sedang Dikembangkan</div>
-                <p class="text-gray-500">Menampilkan Peta Provinsi dan Grafik Batang.</p>
-            </div>
-        @else
-            <!-- Placeholder for other tabs -->
-            <div class="lg:col-span-12 flex flex-col gap-6 items-center justify-center py-12">
-                <div class="text-2xl font-bold text-gray-400">Dashboard {{ $activeTab }}</div>
-            </div>
+            @include('filament.admin.pages.tabs.ibs')
+        @elseif($activeTab === 'IMK')
+            @include('filament.admin.pages.tabs.imk')
+        @elseif($activeTab === 'KEK-KI')
+            @include('filament.admin.pages.tabs.kek-ki')
         @endif
     </div>
 </x-filament-panels::page>
-

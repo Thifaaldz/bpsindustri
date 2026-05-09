@@ -1,105 +1,102 @@
 @php
     use Carbon\Carbon;
-    $now         = Carbon::now();
-    $currentYear = $now->year;
+    $now          = Carbon::now();
+    $currentDay   = $now->day;
     $currentMonth = $now->month;
-    $currentDay  = $now->day;
+    $currentYear  = $now->year;
 
-    // Get start of calendar month for grid
-    $firstDayOfMonth = Carbon::createFromDate($currentYear, $currentMonth, 1);
-    $startDow = $firstDayOfMonth->dayOfWeekIso; // 1=Mon, 7=Sun
-    $daysInMonth = $firstDayOfMonth->daysInMonth;
-    $daysInPrevMonth = $firstDayOfMonth->copy()->subMonth()->daysInMonth;
+    $firstDay      = Carbon::createFromDate($currentYear, $currentMonth, 1);
+    $startDow      = $firstDay->dayOfWeekIso;
+    $daysInMonth   = $firstDay->daysInMonth;
+    $prevMonthDays = $firstDay->copy()->subMonth()->daysInMonth;
 
-    $weeks  = [];
-    $day    = 1;
-    $prevDay = $daysInPrevMonth - $startDow + 2;
-    $nextDay = 1;
-
-    for ($week = 0; $week < 6; $week++) {
+    $weeks = []; $day = 1; $prevDay = $prevMonthDays - $startDow + 2; $nextDay = 1;
+    for ($w = 0; $w < 6; $w++) {
         $row = [];
-        for ($dow = 1; $dow <= 7; $dow++) {
-            $cellIndex = $week * 7 + $dow;
-            if ($cellIndex < $startDow) {
-                $row[] = ['day' => $prevDay++, 'type' => 'prev'];
-            } elseif ($day <= $daysInMonth) {
-                $row[] = ['day' => $day++, 'type' => 'current'];
-            } else {
-                $row[] = ['day' => $nextDay++, 'type' => 'next'];
-            }
+        for ($d = 1; $d <= 7; $d++) {
+            $ci = $w * 7 + $d;
+            if ($ci < $startDow)           $row[] = ['day' => $prevDay++, 'type' => 'prev'];
+            elseif ($day <= $daysInMonth)  $row[] = ['day' => $day++,     'type' => 'current'];
+            else                           $row[] = ['day' => $nextDay++,  'type' => 'next'];
         }
         $weeks[] = $row;
-        if ($day > $daysInMonth && $week >= 3) break;
+        if ($day > $daysInMonth && $w >= 3) break;
     }
-
-    $monthName = $firstDayOfMonth->translatedFormat('M Y');
+    $monthName = $firstDay->format('M Y');
 @endphp
 
-<x-filament-widgets::widget>
-    <div class="rounded-xl p-5 bg-[#FFF5E0] h-full flex flex-col gap-4">
-        {{-- Header --}}
-        <div class="flex items-center gap-3">
-            <div class="p-2 rounded-md bg-white shadow-sm">
-                <svg class="w-5 h-5 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+{{-- Outer yellow card --}}
+<div class="flex flex-col gap-3 h-full overflow-hidden"
+     style="background-color:#FFE9A0; border-radius:2rem; padding:1rem;">
+
+    {{-- Header pill --}}
+    <div class="flex items-center gap-2 bg-white w-max px-3 py-1.5 rounded-full shadow-sm flex-shrink-0">
+        <div class="p-1 rounded-full" style="background:#000;">
+            <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+        </div>
+        <h2 class="text-xs font-bold text-gray-900 whitespace-nowrap">Timeline Kegiatan Statistik Industri</h2>
+    </div>
+
+    {{-- Calendar white card --}}
+    <div class="bg-white flex-1 min-h-0 overflow-hidden flex flex-col" style="border-radius:1rem; padding:0.75rem;">
+
+        {{-- Month nav --}}
+        <div class="flex items-center justify-between mb-2 flex-shrink-0">
+            <span class="flex items-center gap-1 font-bold text-xs" style="color:#374151;">
+                {{ $monthName }}
+                <svg class="w-3 h-3" style="color:#F57C00;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
                 </svg>
+            </span>
+            <div class="flex gap-0.5">
+                <button class="p-1 rounded hover:bg-gray-100" style="color:#F57C00;">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+                <button class="p-1 rounded hover:bg-gray-100" style="color:#F57C00;">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
             </div>
-            <h2 class="text-lg font-bold text-gray-900">Timeline Kegiatan Statistik Industri</h2>
         </div>
 
-        {{-- Calendar --}}
-        <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-            {{-- Month Navigation --}}
-            <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center gap-1 font-bold text-gray-800 text-sm">
-                    {{ $monthName }}
-                    <svg class="w-3.5 h-3.5 text-[#E07B2A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
-                    </svg>
-                </div>
-                <div class="flex gap-1">
-                    <button class="p-1 rounded hover:bg-gray-100 text-[#E07B2A]">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                        </svg>
-                    </button>
-                    <button class="p-1 rounded hover:bg-gray-100 text-[#E07B2A]">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                        </svg>
-                    </button>
-                </div>
-            </div>
+        {{-- Day headers --}}
+        <div class="grid grid-cols-7 flex-shrink-0">
+            @foreach(['Mon','Tue','Wed','Thu','Fri','Sat','Sun'] as $d)
+                <div class="text-center font-semibold py-0.5" style="font-size:9px; color:#9CA3AF;">{{ $d }}</div>
+            @endforeach
+        </div>
 
-            {{-- Day Names --}}
-            <div class="grid grid-cols-7 gap-0.5 mb-1">
-                @foreach(['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'] as $d)
-                    <div class="text-center text-[10px] font-semibold text-gray-400 py-1">{{ $d }}</div>
-                @endforeach
-            </div>
-
-            {{-- Calendar Days --}}
+        {{-- Days --}}
+        <div class="flex-1 min-h-0 flex flex-col justify-around">
             @foreach($weeks as $week)
-                <div class="grid grid-cols-7 gap-0.5">
+                <div class="grid grid-cols-7">
                     @foreach($week as $cell)
                         @php
-                            $isToday   = $cell['type'] === 'current' && $cell['day'] === $currentDay;
-                            $isCurrent = $cell['type'] === 'current';
+                            $isToday    = $cell['type']==='current' && $cell['day']===$currentDay;
+                            $isCurrent  = $cell['type']==='current';
+                            $isSelected = $selectedDate==$cell['day'] && $isCurrent && !$isToday;
                         @endphp
-                        <div class="text-center py-1">
-                            <span class="
-                                text-xs inline-flex items-center justify-center w-6 h-6 rounded-full
-                                {{ $isToday ? 'bg-[#E07B2A] text-white font-bold' : '' }}
-                                {{ !$isToday && $isCurrent ? 'text-gray-800 hover:bg-orange-50' : 'text-gray-300' }}
-                                cursor-pointer
-                            ">
-                                {{ $cell['day'] }}
-                            </span>
+                        <div class="flex items-center justify-center py-0.5">
+                            <span wire:click="{{ $isCurrent ? 'setDate('.$cell['day'].')' : '' }}"
+                                class="inline-flex items-center justify-center w-6 h-6 rounded-full transition-colors {{ $isCurrent ? 'cursor-pointer' : '' }}"
+                                style="
+                                    font-size:11px; font-weight:{{ $isToday || $isSelected ? '700' : '500' }};
+                                    {{ $isToday    ? 'background:#F57C00; color:#fff;' : '' }}
+                                    {{ $isSelected ? 'outline:2px solid #F57C00; background:#FFF7ED; color:#F57C00;' : '' }}
+                                    {{ !$isToday && !$isSelected && $isCurrent ? 'color:#1F2937;' : '' }}
+                                    {{ !$isCurrent ? 'color:#D1D5DB;' : '' }}
+                                "
+                            >{{ $cell['day'] }}</span>
                         </div>
                     @endforeach
                 </div>
             @endforeach
         </div>
     </div>
-</x-filament-widgets::widget>
+</div>

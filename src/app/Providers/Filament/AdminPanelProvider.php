@@ -39,7 +39,7 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Blue,
             ])
-            ->maxContentWidth(MaxWidth::SevenExtraLarge)
+            ->maxContentWidth(MaxWidth::Full)
             ->sidebarCollapsibleOnDesktop()
             ->brandLogo(fn () => view('filament.admin.logo'))
             ->brandLogoHeight('8rem')
@@ -118,6 +118,14 @@ class AdminPanelProvider extends PanelProvider
             ->renderHook(
                 \Filament\View\PanelsRenderHook::TOPBAR_START,
                 fn () => view('filament.admin.topbar-tabs')
+            )
+            ->renderHook(
+                \Filament\View\PanelsRenderHook::TOPBAR_END,
+                fn () => view('filament.admin.topbar-end')
+            )
+            ->renderHook(
+                \Filament\View\PanelsRenderHook::HEAD_END,
+                fn () => new \Illuminate\Support\HtmlString('<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>')
             )
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->middleware([

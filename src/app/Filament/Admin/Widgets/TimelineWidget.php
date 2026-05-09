@@ -9,4 +9,11 @@ class TimelineWidget extends Widget
     protected static string $view = 'filament.admin.widgets.timeline-widget';
     protected int | string | array $columnSpan = 1;
     protected static ?int $sort = 1;
+    
+    public $selectedDate = null;
+    
+    public function setDate($day)
+    {
+        $this->selectedDate = $day;
+    }
 }

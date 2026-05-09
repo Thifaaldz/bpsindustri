@@ -20,15 +20,25 @@
 
 /* Main background */
 body,
-.fi-main,
+.fi-main {
+    background-color: var(--dashboard-bg, #FFF9E1) !important;
+}
+
 .fi-main-ctn {
-    background-color: #FAF3E8 !important;
+    background-color: var(--dashboard-bg, #FFF9E1) !important;
+    padding: 1.5rem !important; /* Adjust if needed, but let's make it tighter */
+    gap: 0 !important;
+    max-width: 100% !important;
+}
+
+.fi-page {
+    gap: 0 !important;
 }
 
 /* Topbar - matches the warm golden bar in the design */
 .fi-topbar {
-    background-color: #F9D77E !important;
-    border-bottom: 1px solid #F0C85A !important;
+    background-color: #FFE082 !important;
+    border-bottom: none !important;
     box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
 }
 

@@ -4,21 +4,16 @@ namespace App\Filament\Admin\Widgets;
 
 use App\Models\StatisticSeries;
 use App\Models\StatisticPeriod;
-use Filament\Widgets\ChartWidget;
+use Filament\Widgets\Widget;
 
-class PeranIndustriChartWidget extends ChartWidget
+class PeranIndustriChartWidget extends Widget
 {
-    protected static ?string $heading = 'Peran Industri Pengolahan dalam Ekonomi';
+    protected static string $view = 'filament.admin.widgets.peran-industri-chart-widget';
     protected static ?int $sort = 5;
     protected int | string | array $columnSpan = 1;
 
     public int $selectedYear;
     public array $availableYears = [];
-
-    public function getHeading(): string
-    {
-        return 'Peran Industri Pengolahan dalam Ekonomi';
-    }
 
     public function mount(): void
     {
@@ -34,9 +29,13 @@ class PeranIndustriChartWidget extends ChartWidget
         }
     }
 
-    protected function getData(): array
+    public function updatedSelectedYear(): void
     {
-        // Look for distribution/PDB series grouped by category
+        // Livewire re-renders automatically
+    }
+
+    public function getChartData(): array
+    {
         $series = StatisticSeries::where('group_key', 'distribusi_pdb')
             ->orWhere('group_key', 'share_kategori')
             ->with(['points' => function ($q) {
@@ -80,24 +79,6 @@ class PeranIndustriChartWidget extends ChartWidget
                 'borderWidth'     => 0,
             ]],
             'labels' => $labels,
-        ];
-    }
-
-    protected function getType(): string
-    {
-        return 'doughnut';
-    }
-
-    protected function getOptions(): array
-    {
-        return [
-            'plugins' => [
-                'legend' => [
-                    'position' => 'right',
-                    'labels'   => ['boxWidth' => 10, 'font' => ['size' => 11]],
-                ],
-            ],
-            'cutout' => '60%',
         ];
     }
 }
